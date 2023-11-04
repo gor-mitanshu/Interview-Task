@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import Visitors from "./components/visitors/visitorsListing/Visitors";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import AddVisitors from "./components/visitors/visitorAdd/AddVisitors";
+import ViewVisitor from "./components/visitors/visitorView/ViewVisitor";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={ <Login /> } />
+        <Route path="/register" element={ <Register /> } />
+
+        <Route path="/" element={ <Layout /> }>
+          <Route index element={ <Navigate to="visitors" replace /> } />
+          <Route path="/visitors" element={ <Visitors /> } />
+          <Route path="/addvisitors" element={ <AddVisitors /> } />
+          <Route
+            path={ "/visitors/visitor/:id" }
+            element={
+              <ViewVisitor />
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;

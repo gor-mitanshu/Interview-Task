@@ -6,6 +6,7 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import AddVisitors from "./components/visitors/visitorAdd/AddVisitors";
 import ViewVisitor from "./components/visitors/visitorView/ViewVisitor";
+import './App.css';
 
 const App = () => {
   return (

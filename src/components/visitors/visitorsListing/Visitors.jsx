@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
-import { Typography, Link, Button } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import axios from "axios";
 import { PersonAddAlt, Visibility } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Visitors = () => {
   const [visitors, setVisitors] = useState([]);
@@ -103,24 +103,25 @@ const Visitors = () => {
           icon={<Visibility color={"primary"} />}
           label="Delete"
           onClick={() => {
-            // debugger;
             navigate(`/visitors/visitor/${params.row.visitor_id}`);
           }}
         />,
       ],
     },
   ];
-  console.log(visitors);
   const rows = visitors.map((visitor, key) => ({
     id: key + 1,
     visitor_id: visitor.id,
+    project_id: visitor.project_id,
     first_name: visitor.first_name,
     last_name: visitor.last_name,
-    email: visitor.email,
     phone: visitor.phone,
+    occupation: visitor.occupation,
+    priority: visitor.priority,
+
+    email: visitor.email,
     phone_2: visitor.phone_2,
     Inquiry_date: visitor.Inquiry_date,
-    priority: visitor.priority,
   }));
 
   return (
@@ -128,7 +129,7 @@ const Visitors = () => {
       <Typography variant="h3" color="black" gutterBottom>
         Visitors
       </Typography>
-      <Link to="/add-visitor">
+      <Link to="/addvisitors">
         <Button
           variant="contained"
           color="primary"

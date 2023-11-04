@@ -17,8 +17,10 @@ import ListItemText from "@mui/material/ListItemText";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "./style.css";
+import { toast } from "react-toastify";
+import { Logout } from "@mui/icons-material";
 
 const drawerWidth = 200;
 
@@ -69,6 +71,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -78,6 +81,11 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+    toast.success("Logged Out Successfully");
+  };
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -132,6 +140,22 @@ export default function PersistentDrawerLeft() {
                 className={"active"}
               >
                 <ListItemText primary={"Visitors"} />
+              </NavLink>
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider />
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleLogout}>
+              <ListItemIcon>
+                <Logout />
+              </ListItemIcon>
+              <NavLink
+                to="/login"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <ListItemText primary={"Logout"} />
               </NavLink>
             </ListItemButton>
           </ListItem>

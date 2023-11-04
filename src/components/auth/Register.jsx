@@ -48,19 +48,21 @@ function Register() {
         `${process.env.REACT_APP_API}/api/register`,
         formData
       );
-      console.log(response);
       if (response.data.status === true) {
-        console.log(response);
-        toast.success("Registration successful!");
+        toast.success(response.data.msg);
         navigate("/login");
       } else {
-        toast.error("Registration failed. Please try again.");
+        const errorMessage = response.data.msg;
+        setRegistrationErrors(errorMessage);
+        // for (let key in errorMessage) {
+        //   toast.error(errorMessage[key][0]);
+        // }
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.msg) {
         setRegistrationErrors(error.response.data.msg);
       } else {
-        console.log("An unexpected error occurred:", error);
+        // console.log("An unexpected error occurred:", error);
         toast.error("An unexpected error occurred. Please try again later.");
       }
     }
@@ -107,7 +109,9 @@ function Register() {
                 />
                 {registrationErrors.first_name && (
                   <Typography variant="caption" color="error">
-                    {registrationErrors.first_name[0]}
+                    {registrationErrors.first_name.length > 0
+                      ? registrationErrors.first_name[0]
+                      : ""}
                   </Typography>
                 )}
               </Grid>
@@ -124,7 +128,9 @@ function Register() {
                 />
                 {registrationErrors.last_name && (
                   <Typography variant="caption" color="error">
-                    {registrationErrors.last_name[0]}
+                    {registrationErrors.last_name.length > 0
+                      ? registrationErrors.last_name[0]
+                      : ""}
                   </Typography>
                 )}
               </Grid>
@@ -141,7 +147,9 @@ function Register() {
                 />
                 {registrationErrors.email && (
                   <Typography variant="caption" color="error">
-                    {registrationErrors.email[0]}
+                    {registrationErrors.email.length > 0
+                      ? registrationErrors.email[0]
+                      : ""}
                   </Typography>
                 )}
               </Grid>
@@ -152,13 +160,16 @@ function Register() {
                   id="phone"
                   label="Phone"
                   name="phone"
+                  type="number"
                   autoComplete="tel"
                   value={formData.phone}
                   onChange={handleInputChange}
                 />
                 {registrationErrors.phone && (
                   <Typography variant="caption" color="error">
-                    {registrationErrors.phone[0]}
+                    {registrationErrors.phone.length > 0
+                      ? registrationErrors.phone[0]
+                      : ""}
                   </Typography>
                 )}
               </Grid>
@@ -176,7 +187,9 @@ function Register() {
                 />
                 {registrationErrors.password && (
                   <Typography variant="caption" color="error">
-                    {registrationErrors.password[0]}
+                    {registrationErrors.password.length > 0
+                      ? registrationErrors.password[0]
+                      : ""}
                   </Typography>
                 )}
               </Grid>
@@ -194,7 +207,9 @@ function Register() {
                 />
                 {registrationErrors.confirm_password && (
                   <Typography variant="caption" color="error">
-                    {registrationErrors.confirm_password[0]}
+                    {registrationErrors.confirm_password.length > 0
+                      ? registrationErrors.confirm_password[0]
+                      : ""}
                   </Typography>
                 )}
               </Grid>

@@ -35,19 +35,12 @@ const Copyright = (props) => {
 const Login = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const [error, setError] = useState(null);
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+  const [loginErrors, setLoginErrors] = React.useState({});
   const [loading, setLoading] = useState(false);
-
-  const showErrorWithTimeout = (errorMessage, timeout) => {
-    setError(errorMessage);
-    setTimeout(() => {
-      setError(null);
-    }, timeout);
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,12 +52,6 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (!user.email || !user.password) {
-      showErrorWithTimeout("Please enter both email and password", 3000);
-      return;
-    }
-
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API}/api/login`,
@@ -74,19 +61,31 @@ const Login = () => {
         }
       );
       if (!!response) {
-        setLoading(false);
-        localStorage.setItem("token", JSON.stringify(response.data.data.token));
-        navigate(state?.path || "/visitors", { replace: true });
-        toast.success(response.data.msg);
+        if (!!response.data.status === true) {
+          setLoading(true);
+          localStorage.setItem(
+            "token",
+            JSON.stringify(response.data.data.token)
+          );
+          localStorage.setItem("success", JSON.stringify(response.data.status));
+          navigate(state?.path || "/visitors", { replace: true });
+          toast.success(response.data.msg);
+          setLoading(false);
+        } else {
+          const error = response.data.msg;
+          setLoginErrors(error);
+          toast.error(error);
+          // debugger;
+          setLoading(false);
+        }
+      } else {
+        // debugger;
+        const errorss = response.data.msg;
+        // setLoginErrors(errorss);
+        toast.error(errorss);
       }
-      setLoading(true);
     } catch (error) {
       setLoading(false);
-
-      showErrorWithTimeout(
-        "Login failed. Please check your credentials.",
-        3000
-      );
     }
   };
   const defaultTheme = createTheme();
@@ -119,11 +118,6 @@ const Login = () => {
                 <Typography component="h1" variant="h5">
                   Login
                 </Typography>
-                {error && (
-                  <Typography marginTop={1} textAlign={"center"} color="error">
-                    <b>Error:</b> {error}
-                  </Typography>
-                )}
                 <Box
                   component="form"
                   onSubmit={handleSubmit}
@@ -142,6 +136,11 @@ const Login = () => {
                     value={user.email}
                     onChange={handleChange}
                   />
+                  {loginErrors.email && (
+                    <Typography variant="caption" color="error">
+                      {loginErrors.email.length > 0 ? loginErrors.email[0] : ""}
+                    </Typography>
+                  )}
                   <TextField
                     margin="normal"
                     required
@@ -154,6 +153,13 @@ const Login = () => {
                     value={user.password}
                     onChange={handleChange}
                   />
+                  {loginErrors.password && (
+                    <Typography variant="caption" color="error">
+                      {loginErrors.password.length > 0
+                        ? loginErrors.password[0]
+                        : ""}
+                    </Typography>
+                  )}
                   <Button
                     type="submit"
                     fullWidth
@@ -166,7 +172,7 @@ const Login = () => {
                     <Link to={"/forget-password"}>Forgot password?</Link>
                   </Grid>
                   <Grid item textAlign={"center"} marginBottom={1}>
-                    <Link to={"/sign-up"}>Don't have an account? Sign Up</Link>
+                    <Link to={"/register"}>Don't have an account? Sign Up</Link>
                   </Grid>
                 </Box>
               </>

@@ -21,6 +21,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "./style.css";
 import { toast } from "react-toastify";
 import { Logout } from "@mui/icons-material";
+import { useAuth } from "../protectedRoute/authContext";
 
 const drawerWidth = 200;
 
@@ -69,6 +70,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
+  const { logout } = useAuth();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const navigate = useNavigate();
@@ -82,6 +84,8 @@ export default function PersistentDrawerLeft() {
   };
 
   const handleLogout = () => {
+    // localStorage.clear();
+    logout();
     localStorage.clear();
     navigate("/login");
     toast.success("Logged Out Successfully");

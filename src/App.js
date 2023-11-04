@@ -7,22 +7,26 @@ import Register from "./components/auth/Register";
 import AddVisitors from "./components/visitors/visitorAdd/AddVisitors";
 import ViewVisitor from "./components/visitors/visitorView/ViewVisitor";
 import './App.css';
+import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
 
 const App = () => {
+  const ProtectedRoutes = ProtectedRoute();
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={ <Login /> } />
         <Route path="/register" element={ <Register /> } />
 
-        <Route path="/" element={ <Layout /> }>
+        <Route path="/" element={ <ProtectedRoutes>
+          <Layout /></ProtectedRoutes> }>
           <Route index element={ <Navigate to="visitors" replace /> } />
-          <Route path="/visitors" element={ <Visitors /> } />
-          <Route path="/addvisitors" element={ <AddVisitors /> } />
+          <Route path="/visitors" element={ <ProtectedRoutes><Visitors /></ProtectedRoutes> } />
+          <Route path="/addvisitors" element={ <ProtectedRoutes><AddVisitors /> </ProtectedRoutes> } />
           <Route
             path={ "/visitors/visitor/:id" }
             element={
-              <ViewVisitor />
+              <ProtectedRoutes><ViewVisitor /></ProtectedRoutes>
             }
           />
         </Route>

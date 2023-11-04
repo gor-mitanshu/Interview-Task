@@ -13,9 +13,8 @@ const Visitors = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const tokenWithQuotes = localStorage.getItem("token");
-        const tokenParts = tokenWithQuotes.split('"');
-        const token = tokenParts[1];
+        const token = localStorage.getItem("token");
+        console.log(token);
 
         const response = await axios.post(
           `${process.env.REACT_APP_API}/api/visitors_listening`,

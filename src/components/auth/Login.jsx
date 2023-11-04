@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useAuth } from "../protectedRoute/authContext";
 
 const Copyright = (props) => {
   return (
@@ -33,6 +34,7 @@ const Copyright = (props) => {
 };
 
 const Login = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const { state } = useLocation();
   const [user, setUser] = useState({
@@ -63,11 +65,12 @@ const Login = () => {
       if (!!response) {
         if (!!response.data.status === true) {
           setLoading(true);
-          localStorage.setItem(
-            "token",
-            JSON.stringify(response.data.data.token)
-          );
-          localStorage.setItem("success", JSON.stringify(response.data.status));
+          // localStorage.setItem(
+          //   "token",
+          //   JSON.stringify(response.data.data.token)
+          // );
+          // localStorage.setItem("success", JSON.stringify(response.data.status));
+          login(response.data);
           navigate(state?.path || "/visitors", { replace: true });
           toast.success(response.data.msg);
           setLoading(false);

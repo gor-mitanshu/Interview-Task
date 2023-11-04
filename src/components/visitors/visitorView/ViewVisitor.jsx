@@ -10,9 +10,7 @@ const ViewVisitor = () => {
 
   useEffect(() => {
     const getVisitor = async () => {
-      const tokenWithQuotes = localStorage.getItem("token");
-      const tokenParts = tokenWithQuotes.split('"');
-      const token = tokenParts[1];
+      const token = localStorage.getItem("token");
 
       const res = await axios.post(
         `${process.env.REACT_APP_API}/api/visitors_details`,
